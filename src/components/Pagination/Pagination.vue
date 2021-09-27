@@ -4,40 +4,64 @@
 			<ul class="pagination">
 
 				<li
+					v-if="firstLastButtons"
 					:class="{ disabled: curPage === firstPage }"
 					class="page-item"
 				>
-					<router-link :to="buildQueryString(firstPage)" tag="a" class="page-link" @click="emitLoadPage(firstPage)">‹‹</router-link>
+					<a
+						class="page-link"
+						@click="goToPage(firstPage)"
+					>‹‹</a>
 				</li>
 
 				<li
+					v-if="prevNextButtons"
 					:class="{ disabled: prevPage == null }"
 					class="page-item"
 				>
-					<router-link :to="buildQueryString(prevPage)" tag="a" class="page-link" @click="emitLoadPage(prevPage)">‹</router-link>
+					<a
+						class="page-link"
+						@click="goToPage(prevPage)"
+					>‹</a>
 				</li>
 
 				<li
 					v-for="page in pages"
 					:key="page"
 					class="page-item"
-					:class="{ active: page === curPage }"
+					:class="{ active: page === curPage, disabled: page === null }"
 				>
-					<router-link :to="buildQueryString(page)" tag="a" class="page-link" @click="emitLoadPage(page)">{{ page }}</router-link>
+					<a
+						v-if="page !== null"
+						class="page-link"
+						@click="goToPage(page)"
+					>{{ page }}</a>
+					<a
+						v-else
+						class="page-link disabled"
+					>{{ this.fillerNavList }}</a>
 				</li>
 
 				<li
+					v-if="prevNextButtons"
 					:class="{ disabled: nextPage == null }"
 					class="page-item"
 				>
-					<router-link :to="buildQueryString(nextPage)" tag="a" class="page-link" @click="emitLoadPage(nextPage)">›</router-link>
+					<a
+						class="page-link"
+						@click="goToPage(nextPage)"
+					>›</a>
 				</li>
 
 				<li
+					v-if="firstLastButtons"
 					:class="{ disabled: curPage === lastPage }"
 					class="page-item"
 				>
-					<router-link :to="buildQueryString(lastPage)" tag="a" class="page-link" @click="emitLoadPage(lastPage)">››</router-link>
+					<a
+						class="page-link"
+						@click="goToPage(lastPage)"
+					>››</a>
 				</li>
 
 			</ul>
@@ -59,23 +83,41 @@ export default {
 		data: {
 			default: null,
 			type: Object,
-		}
+		},
+
+		linksNum: {
+			default: 3,
+			type: Number,
+		},
+
+		firstLastButtons: {
+			default: true,
+			type: Boolean,
+		},
+
+		prevNextButtons: {
+			default: true,
+			type: Boolean,
+		},
+
+		fillNavList: {
+			default: false,
+			type: Boolean,
+		},
+
+		fillerNavList: {
+			default: '.',
+			type: String,
+		},
 	},
 
 	data() {
 		return {
-			page: 1,
-			perPage: null,
 			firstPage: 1,
 		};
 	},
 
 	mounted() {
-		let q = this.$router.currentRoute.value.query;
-
-		this.page = q.p ?? 1;
-		this.perPage = q.pp ?? null;
-
 		this.emitLoadPage(this.page);
 	},
 
@@ -91,31 +133,49 @@ export default {
 			this.page = p;
 		},
 
-		buildQuery(p) {
-			let q = { p };
-			if(this.perPage !== null)
-				q.pp = this.perPage;
-			return q;
+		goToPage(p) {
+			this.$router.push(this.buildRoute(p));
+			this.emitLoadPage(p);
 		},
 
-		buildQueryString(p) {
-			let qs = '?';
-			qs += '&p=' + p;
-			if(this.perPage !== null)
-				qs += '&pp=' + this.perPage;
+		buildRoute(p) {
+			let q = {
+				...this.$route.query,
+				p,
+				pp: this.perPage,
+			};
 
-			return qs;
+			let str = [];
+			for(let p in q)
+				if(q[p] !== null)
+					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(q[p]));
+
+			return '?' + str.join("&");
 		},
 	},
 
 	computed: {
+		perPage() {
+			return this.$route.query.pp ?? null;
+		},
+
+		page() {
+			return this.$route.query.p ?? 1;
+		},
+
 		pages() {
 			if(this.data === null)
 				return [];
 
 			let pages = [];
-			for(let i = this.pagesStart; i <= this.pagesEnd; i++){
-				pages.push(i);
+			for(let i = this.curPage - this.linksNum; i <= this.curPage + this.linksNum; i++){
+				if(
+					i >= this.pagesStart
+					&& i <= this.pagesEnd
+				)
+					pages.push(i);
+				else if(this.fillNavList)
+					pages.push(null);
 			}
 
 			return pages;
@@ -136,13 +196,13 @@ export default {
 		pagesStart(){
 			if(this.data === null)
 				return 1;
-			return Math.max(this.firstPage, this.curPage - 3);
+			return Math.max(this.firstPage, this.curPage - this.linksNum);
 		},
 
 		pagesEnd(){
 			if(this.data === null)
 				return 1;
-			return Math.min(this.lastPage, this.curPage + 3);
+			return Math.min(this.lastPage, this.curPage + this.linksNum);
 		},
 
 		prevPage(){
@@ -160,6 +220,10 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped type="text/scss">
+	.pagination{
+		li{
+			cursor: pointer;
+		}
+	}
 </style>
