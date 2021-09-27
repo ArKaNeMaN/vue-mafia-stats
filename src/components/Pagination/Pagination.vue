@@ -4,6 +4,13 @@
 			<ul class="pagination">
 
 				<li
+					:class="{ disabled: curPage === firstPage }"
+					class="page-item"
+				>
+					<router-link :to="buildQueryString(firstPage)" tag="a" class="page-link" @click="emitLoadPage(firstPage)">‹‹</router-link>
+				</li>
+
+				<li
 					:class="{ disabled: prevPage == null }"
 					class="page-item"
 				>
@@ -24,6 +31,13 @@
 					class="page-item"
 				>
 					<router-link :to="buildQueryString(nextPage)" tag="a" class="page-link" @click="emitLoadPage(nextPage)">›</router-link>
+				</li>
+
+				<li
+					:class="{ disabled: curPage === lastPage }"
+					class="page-item"
+				>
+					<router-link :to="buildQueryString(lastPage)" tag="a" class="page-link" @click="emitLoadPage(lastPage)">››</router-link>
 				</li>
 
 			</ul>
