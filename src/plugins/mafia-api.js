@@ -65,8 +65,8 @@ export default class MafiaApi {
 
     static makePaginationParams(page = 1, perPage = 20){
         return {
-            p: page,
-            pp: perPage,
+            p: page ?? 1,
+            pp: perPage ?? 20,
         };
     }
 
@@ -75,6 +75,17 @@ export default class MafiaApi {
             return MafiaApi.get(
                 'players',
                 MafiaApi.makePaginationParams(page, perPage),
+                options
+            );
+        }
+
+        static search(search = {}, page = null, perPage = null, options = {}){
+            return MafiaApi.get(
+                'players/search',
+                {
+                    ...search,
+                    ...MafiaApi.makePaginationParams(page, perPage)
+                },
                 options
             );
         }
