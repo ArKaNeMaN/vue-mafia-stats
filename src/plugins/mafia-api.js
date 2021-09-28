@@ -147,6 +147,28 @@ export default class MafiaApi {
                 options
             );
         }
+
+        static getGames(
+            player_id,
+            options = {}
+        ){
+            return MafiaApi.get(`player/${player_id}/games`, {}, options);
+        }
+
+        static getGPLayers(
+            player_id,
+            data = {page: null, perPage: null, withGames: false},
+            options = {}
+        ){
+            return MafiaApi.get(
+                `player/${player_id}/gPlayers`,
+                {
+                    ...MafiaApi.makePaginationParams(data),
+                    ...(data.withGames ? {withGames: null} : {})
+                },
+                options
+            );
+        }
     }
 
     static VueInstaller = {
