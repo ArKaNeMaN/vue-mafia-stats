@@ -221,9 +221,7 @@ export default {
 </script>
 
 <style scoped type="text/scss">
-	.pagination{
-		li{
-			cursor: pointer;
-		}
+	.pagination li{
+		cursor: pointer;
 	}
 </style>
