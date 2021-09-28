@@ -3,6 +3,8 @@ import axios from 'axios';
 export default class MafiaApi {
     static ROOT_URL = "https://api.mafia.arkan1.ru/v1/";
     static DEFAULT_TIMEOUT = 10 * 1000;
+    static API_TOKEN = null;
+    static USER = null;
 
     static request(method, path, data, options = {}){
         return new Promise((resolve, reject) => {
@@ -11,6 +13,9 @@ export default class MafiaApi {
                 baseURL: this.ROOT_URL,
                 method,
                 data,
+                headers: {
+                    Authorization: (this.API_TOKEN !== null) ? `Bearer ${this.API_TOKEN}` : null,
+                },
                 timeout: this.DEFAULT_TIMEOUT,
                 responseType: 'json',
                 ...options,
@@ -70,6 +75,41 @@ export default class MafiaApi {
         };
     }
 
+    static setApiToken(token){
+        this.API_TOKEN = token;
+    }
+
+    static resetApiToken(){
+        this.setApiToken(null);
+    }
+
+    static auth(token){
+        this.setApiToken(token);
+
+        return new Promise((resolve, reject) => {
+            this.Users.get().then((user) => {
+                this.USER = user;
+                resolve(this.USER);
+            }).catch(reject);
+        });
+    }
+
+    static testAuth(){
+        return new Promise((resolve, reject) => {
+            this.get('test').then((token) => {
+                this.auth(token)
+                    .then(resolve)
+                    .catch(reject);
+            }).catch(reject);
+        });
+    }
+
+    static Users = class Users {
+        static get(options = {}){
+            return MafiaApi.get('user', {}, options);
+        }
+    }
+
     static Players = class Players {
         static list(page = null, perPage = null, options = {}){
             return MafiaApi.get(
@@ -101,8 +141,6 @@ export default class MafiaApi {
 
     static VueInstaller = {
         install(app) {
-            app.mafiaApi = MafiaApi;
-            window.mafiaApi = MafiaApi;
             app.config.globalProperties.mafiaApi = MafiaApi;
             app.config.globalProperties.$mafiaApi = MafiaApi;
         }
