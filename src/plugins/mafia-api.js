@@ -68,10 +68,10 @@ export default class MafiaApi {
         return this.request('delete', path, data, options);
     }
 
-    static makePaginationParams(page = 1, perPage = 10){
+    static makePaginationParams({page = null, perPage = null} = {}){
         return {
-            p: page ?? 1,
-            pp: perPage ?? 10,
+            ...(page != null ? {p: page} : {}),
+            ...(perPage != null ? {pp: perPage} : {}),
         };
     }
 
@@ -111,26 +111,36 @@ export default class MafiaApi {
     }
 
     static Players = class Players {
-        static list(page = null, perPage = null, options = {}){
+        static list(
+            data = {page: null, perPage: null},
+            options = {}
+        ){
             return MafiaApi.get(
                 'players',
-                MafiaApi.makePaginationParams(page, perPage),
+                MafiaApi.makePaginationParams(data),
                 options
             );
         }
 
-        static search(search = {}, page = null, perPage = null, options = {}){
+        static search(
+            search = {s: null, name: null, nickname: null},
+            data = {page: null, perPage: null},
+            options = {}
+        ){
             return MafiaApi.get(
                 'players/search',
                 {
                     ...search,
-                    ...MafiaApi.makePaginationParams(page, perPage)
+                    ...MafiaApi.makePaginationParams(data)
                 },
                 options
             );
         }
 
-        static get(player_id, options = {}){
+        static get(
+            player_id,
+            options = {}
+        ){
             return MafiaApi.get(
                 'player/' + player_id,
                 {},

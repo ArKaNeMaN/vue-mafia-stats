@@ -40,8 +40,8 @@ export default {
 		this.inputSearch = this.search;
 	},
 	methods: {
-		loadPlayers({ page = this.page, perPage = this.perPage } = {}) {
-			this.mafiaApi.Players.search({s: `%${this.search}%`}, page, perPage)
+		loadPlayers(pagination = {page: this.page, perPage: this.perPage}) {
+			this.mafiaApi.Players.search({s: `%${this.search}%`}, pagination)
 				.then((data) => {
 					this.players = data;
 				});
