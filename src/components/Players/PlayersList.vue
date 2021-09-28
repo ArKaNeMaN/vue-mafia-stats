@@ -12,13 +12,25 @@
 			</div>
 		</form>
 
-		<div class="d-flex flex-wrap flex-fill flex-md-row flex-column flex-wrap justify-content-between">
-			<PlayersListItem
-				v-for="player in players.data"
-				:key="player.id"
-				:player="player"
-			></PlayersListItem>
-		</div>
+		<table class="table table-striped tab">
+			<thead>
+			<tr>
+				<th>№</th>
+				<th>Ник</th>
+				<th>Имя</th>
+				<th>Дата рождения</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+				<PlayersListItem
+					v-for="player in players.data"
+					:key="player.id"
+					:player="player"
+				></PlayersListItem>
+			</tbody>
+		</table>
+
 	</LoadingWrapper>
 	<Pagination :data="players" @load-page="loadPlayers"></Pagination>
 </template>
