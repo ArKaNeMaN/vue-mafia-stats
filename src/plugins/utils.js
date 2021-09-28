@@ -52,11 +52,6 @@ export default class Utils {
         if(delta > oneYear)
             sDate += ` ${date.getFullYear()} года`;
 
-        console.log(oneYear);
-        console.log(curDate);
-        console.log(date);
-        console.log(sDate);
-
         return sDate;
     }
 
