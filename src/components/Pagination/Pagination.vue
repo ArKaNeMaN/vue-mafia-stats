@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex justify-content-center">
+	<div class="d-flex justify-content-center p-3">
 		<nav>
 			<ul class="pagination">
 
@@ -156,7 +156,7 @@ export default {
 
 	computed: {
 		perPage() {
-			return this.$route.query.pp ?? null;
+			return this.$route.query.pp ?? 10;
 		},
 
 		page() {

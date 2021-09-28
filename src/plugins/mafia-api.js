@@ -63,10 +63,10 @@ export default class MafiaApi {
         return this.request('delete', path, data, options);
     }
 
-    static makePaginationParams(page = 1, perPage = 20){
+    static makePaginationParams(page = 1, perPage = 10){
         return {
             p: page ?? 1,
-            pp: perPage ?? 20,
+            pp: perPage ?? 10,
         };
     }
 

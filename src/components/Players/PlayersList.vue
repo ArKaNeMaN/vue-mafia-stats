@@ -1,6 +1,6 @@
 <template>
 	<LoadingWrapper :data="players">
-		<form @submit="doSearch" class="p-2">
+		<form @submit="doSearch" class="p-3">
 			<div class="input-group">
 				<input
 					v-model="inputSearch"
@@ -12,11 +12,13 @@
 			</div>
 		</form>
 
-		<ul>
-			<li v-for="player in players.data" :key="player.id">
-				{{ player.nickname }} ({{ player.name }})
-			</li>
-		</ul>
+		<div class="d-flex flex-wrap flex-fill flex-md-row flex-column flex-wrap justify-content-between">
+			<PlayersListItem
+				v-for="player in players.data"
+				:key="player.id"
+				:player="player"
+			></PlayersListItem>
+		</div>
 	</LoadingWrapper>
 	<Pagination :data="players" @load-page="loadPlayers"></Pagination>
 </template>
@@ -24,9 +26,10 @@
 <script>
 import LoadingWrapper from "@/components/Loading/LoadingWrapper";
 import Pagination from "@/components/Pagination/Pagination";
+import PlayersListItem from "@/components/Players/PlayersListItem";
 export default {
 	name: "PlayersList",
-	components: {Pagination, LoadingWrapper},
+	components: {PlayersListItem, Pagination, LoadingWrapper},
 	data() {
 		return {
 			players: null,
@@ -47,11 +50,8 @@ export default {
 		doSearch(e) {
 			e.preventDefault();
 
-			if(!this.inputSearch.length)
-				return this.setQueryParams({search: null});
-
 			this.setQueryParams({
-				search: this.inputSearch,
+				search: this.inputSearch ?? null,
 				p: null
 			}).then(() => {
 				this.loadPlayers();
