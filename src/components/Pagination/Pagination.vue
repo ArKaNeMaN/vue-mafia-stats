@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex justify-content-center p-3">
 		<nav>
-			<ul class="pagination">
+			<ul class="pagination user-select-none">
 
 				<li
 					v-if="firstLastButtons"
