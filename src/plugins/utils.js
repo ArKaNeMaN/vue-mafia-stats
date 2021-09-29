@@ -2,10 +2,10 @@ export default class Utils {
 
     static app;
 
-    buildRoute(p) {
+    static buildRoute(params) {
         let q = {
             ...this.$route.query,
-            p,
+            ...params,
         };
 
         return '?' + this.serializeQuery(q);
