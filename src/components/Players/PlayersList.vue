@@ -23,25 +23,26 @@
 			</tr>
 			</thead>
 			<tbody>
-				<PlayersListItem
+				<players-list-item
 					v-for="player in players.data"
 					:key="player.id"
 					:player="player"
-				></PlayersListItem>
+				></players-list-item>
 			</tbody>
 		</table>
 
 	</loading-wrapper>
-	<pagination :data="players" @load-page="loadPlayers"></pagination>
+	<laravel-pagination :data="players" @load-page="loadPlayers"></laravel-pagination>
 </template>
 
 <script>
 import LoadingWrapper from "@/components/Loading/LoadingWrapper";
-import Pagination from "@/components/Pagination/Pagination";
+import LaravelPagination from "@/components/Pagination/LaravelPagination";
 import PlayersListItem from "@/components/Players/PlayersListItem";
+
 export default {
 	name: "PlayersList",
-	components: {PlayersListItem, Pagination, LoadingWrapper},
+	components: {PlayersListItem, LaravelPagination, LoadingWrapper},
 	data() {
 		return {
 			players: null,

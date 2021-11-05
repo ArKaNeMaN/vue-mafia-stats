@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex justify-content-center p-3">
+	<div class="d-flex justify-content-center p-3 laravel-pagination">
 		<nav>
 			<ul class="pagination user-select-none">
 
@@ -73,7 +73,7 @@
 
 <script>
 export default {
-	name: "Pagination",
+	name: "LaravelPagination",
 
 	emits: {
 		loadPage: null
@@ -130,7 +130,7 @@ export default {
 				page: p,
 				perPage: this.perPage,
 			});
-			this.page = p;
+			this.$route.query.p = p;
 		},
 
 		goToPage(p) {
@@ -220,7 +220,7 @@ export default {
 }
 </script>
 
-<style scoped type="text/scss">
+<style scoped lang="scss">
 	.pagination {
 		li {
 			cursor: pointer;

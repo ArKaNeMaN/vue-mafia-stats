@@ -5,3 +5,9 @@
 		<p class="alert alert-info text-center">Проект в разработке...</p>
 	</div>
 </template>
+
+<script>
+export default {
+	name: 'AboutPage',
+}
+</script>

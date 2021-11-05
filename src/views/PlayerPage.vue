@@ -32,7 +32,7 @@
 import LoadingWrapper from "@/components/Loading/LoadingWrapper";
 import BackButton from "@/components/Nav/BackButton";
 export default {
-	name: "Player",
+	name: "PlayerPage",
 	components: {BackButton, LoadingWrapper},
 
 	data() {
@@ -46,8 +46,9 @@ export default {
 		this.player = await this.mafiaApi.Players.get(this.$route.params.id);
 
 		this.gPlayers = await this.mafiaApi.Players.getGPLayers(
-			this.$route.params.id,
-			{ withGames: true }
+			Number(this.$route.params.id),
+			{},
+			{ withGames: true },
 		);
 	},
 }

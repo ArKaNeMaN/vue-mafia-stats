@@ -1,6 +1,6 @@
 <template>
 	<li class="nav-item">
-		<router-link :to="url" tag="a" class="nav-link" aria-current="page" active-class="active">
+		<router-link :to="url" class="nav-link" aria-current="page" active-class="active">
 			{{ title }}
 		</router-link>
 	</li>

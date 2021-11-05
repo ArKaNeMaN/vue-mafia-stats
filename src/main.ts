@@ -4,7 +4,7 @@ import "bootstrap"
 import { createApp } from 'vue'
 import App from './App.vue'
 
-let app = createApp(App);
+const app = createApp(App);
 
 import router from './plugins/router'
 app.use(router)

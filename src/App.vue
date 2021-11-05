@@ -1,12 +1,12 @@
 <template>
 	<div class="container">
 		<div class="row">
-			<Header>Mafia Stats</Header>
+			<page-header>Mafia Stats</page-header>
 
-			<NavBar>
-				<NavItem url="/" title="Главная"></NavItem>
-				<NavItem url="/about" title="Инфо"></NavItem>
-			</NavBar>
+			<nav-bar>
+				<nav-item url="/" title="Главная"></nav-item>
+				<nav-item url="/about" title="Инфо"></nav-item>
+			</nav-bar>
 
 			<div id="page-content" class="p-4">
 				<router-view/>
@@ -18,9 +18,9 @@
 <script>
 	import NavBar from "@/components/Nav/NavBar";
 	import NavItem from "@/components/Nav/NavItem";
-	import Header from "@/components/Header";
+	import PageHeader from "@/components/PageHeader";
 
 	export default {
-		components: {Header, NavItem, NavBar}
+		components: {PageHeader, NavItem, NavBar}
 	}
 </script>

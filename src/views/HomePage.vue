@@ -8,7 +8,7 @@
 <script>
 import PlayersList from "@/components/Players/PlayersList";
 export default {
-  name: 'Home',
+  name: 'HomePage',
   components: {PlayersList}
 }
 </script>
