@@ -1,30 +1,31 @@
 <template>
-  <div class="page-player">
-    <BackButton class="float-md-end w-md-auto w-100"></BackButton>
-    <div class="player-info">
-      <LoadingWrapper :data="player">
-        <h2>{{ player.nickname }}</h2>
-      </LoadingWrapper>
-    </div>
-    <hr>
-    <div class="player-games">
-      <LoadingWrapper :data="games">
-        <h2>Games count: {{ games.length }}</h2>
+<div class="page-player">
+	<BackButton class="float-md-end w-md-auto w-100"></BackButton>
 
-        <ul class="list-group">
-          <li v-for="game in games" :key="game.id" class="list-group-item">
-            #{{ game.id }}: {{ utils.fmtDateTime(game.date_time) }}
-            <button class="btn btn-primary" @click="game._showInfo = !(game._showInfo ?? false)">...</button>
-            <br>
-            <code v-if="game._showInfo" class="card p-2 mt-3">
-              <pre>{{ JSON.stringify(game, null, 2) }}</pre>
-            </code>
-          </li>
-        </ul>
+	<loading-wrapper class="player-info" :is-loading="player === null">
+		<h2>{{ player.nickname }}</h2>
+	</loading-wrapper>
 
-      </LoadingWrapper>
-    </div>
-  </div>
+	<hr>
+
+	<loading-wrapper class="player-games" :is-loading="gPlayers === null">
+		<h2>Games count: {{ gPlayers.length }}</h2>
+
+		<ul class="list-group">
+			<li v-for="gPlayer in gPlayers" :key="gPlayer.id" class="list-group-item">
+
+				#{{ gPlayer.game.id }}: {{ utils.fmtDateTime(gPlayer.game.date_time) }}
+				<button class="btn btn-primary" @click="gPlayer._showInfo = !(gPlayer._showInfo ?? false)">...</button>
+
+				<br>
+
+				<code v-if="gPlayer._showInfo" class="card p-2 mt-3">
+					<pre>{{ JSON.stringify(gPlayer, null, 2) }}</pre>
+				</code>
+			</li>
+		</ul>
+	</loading-wrapper>
+</div>
 </template>
 
 <script>
@@ -33,21 +34,21 @@ import BackButton from "@/components/Nav/BackButton";
 export default {
 	name: "Player",
 	components: {BackButton, LoadingWrapper},
+
 	data() {
 		return {
 			player: null,
-      games: null,
+			gPlayers: null,
 		};
 	},
-	mounted() {
-		this.mafiaApi.Players.get(this.$route.params.id)
-			.then((data) => {
-				this.player = data;
-			});
-		this.mafiaApi.Players.getGames(this.$route.params.id)
-			.then((data) => {
-				this.games = data;
-			});
+
+	async mounted() {
+		this.player = await this.mafiaApi.Players.get(this.$route.params.id);
+
+		this.gPlayers = await this.mafiaApi.Players.getGPLayers(
+			this.$route.params.id,
+			{ withGames: true }
+		);
 	},
 }
 </script>

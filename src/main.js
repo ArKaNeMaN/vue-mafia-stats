@@ -3,15 +3,20 @@ import "bootstrap"
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-import router from './router'
-import MafiaApi from './plugins/mafia-api'
-import Utils from './plugins/utils'
 
-createApp(App)
-    .use(router)
-    .use(MafiaApi.VueInstaller)
-    .use(Utils.VueInstaller)
-    .use(VueAxios, axios)
-    .mount('#app')
+let app = createApp(App);
+
+import router from './plugins/router'
+app.use(router)
+
+import MafiaApi from './plugins/mafia-api'
+app.use(MafiaApi.VueInstaller)
+
+import Utils from './plugins/utils'
+app.use(Utils.VueInstaller)
+
+import VueAxios from 'vue-axios'
+import axios from 'axios'
+app.use(VueAxios, axios)
+
+app.mount('#app')

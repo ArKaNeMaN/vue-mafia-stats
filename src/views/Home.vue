@@ -1,7 +1,7 @@
 <template>
 	<div class="home">
 		<h1>Главная страница</h1>
-		<PlayersList></PlayersList>
+		<players-list></players-list>
 	</div>
 </template>
 

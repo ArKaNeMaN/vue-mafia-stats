@@ -1,5 +1,5 @@
 <template>
-	<LoadingWrapper :data="players">
+	<loading-wrapper :is-loading="players == null">
 		<form @submit="doSearch" class="p-3">
 			<div class="input-group">
 				<input
@@ -31,8 +31,8 @@
 			</tbody>
 		</table>
 
-	</LoadingWrapper>
-	<Pagination :data="players" @load-page="loadPlayers"></Pagination>
+	</loading-wrapper>
+	<pagination :data="players" @load-page="loadPlayers"></pagination>
 </template>
 
 <script>

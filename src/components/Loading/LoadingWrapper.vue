@@ -1,28 +1,24 @@
 <template>
-	<div>
-		<LoadingIndicator v-if="isInLoading"></LoadingIndicator>
+	<component :is="tag">
+		<loading-indicator v-if="isLoading" class="p-2"></loading-indicator>
 		<slot v-else></slot>
-	</div>
+	</component>
 </template>
 
 <script>
-import LoadingIndicator from "@/components/Loading/LoadingIndicator";
+import LoadingIndicator from "./LoadingIndicator";
 export default {
 	name: "LoadingWrapper",
 	components: {LoadingIndicator},
 	props: {
-		data: {
-			default: null,
+		isLoading: {
+			required: true,
 		},
-	},
-	computed: {
-		isInLoading(){
-			return (this.data == null);
-		},
+		tag: {
+			default: 'div',
+			required: false,
+			type: String,
+		}
 	},
 }
 </script>
-
-<style scoped>
-
-</style>
