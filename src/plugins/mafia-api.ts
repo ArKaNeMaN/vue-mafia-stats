@@ -1,20 +1,20 @@
 import axios, {AxiosRequestConfig, Method} from 'axios';
-import { App as VueApp } from "vue";
+import {App as VueApp} from "vue";
 
 export type PaginateOptions = {
-    page?: number|null,
-    perPage?: number|null
+    page?: Number | null,
+    perPage?: Number | null
 };
 
 export type SearchOptions = Object;
 export type PlayersSearchOptions = {
-    s?: string|null,
-    name?: string|null,
-    nickname?: string|null,
+    s?: String | null,
+    name?: String | null,
+    nickname?: String | null,
 };
 
 export type PlayersGetGPlayersData = {
-    withGames?: boolean|1|0|null
+    withGames?: Boolean | Number | null
 };
 
 export default class MafiaApi {
@@ -122,7 +122,7 @@ export default class MafiaApi {
     static search(
         path: string,
         search: SearchOptions = {},
-        paginateOptions: PaginateOptions = { page: null, perPage: null },
+        paginateOptions: PaginateOptions = {},
         data = {},
         options: AxiosRequestConfig = {}
     ) {
@@ -173,12 +173,18 @@ export default class MafiaApi {
     }
 
     static Players = class Players {
+        static ROLE_TITLES = {
+            red: 'Мирный',
+            sheriff: 'Шериф',
+            black: 'Мафия',
+            don: 'Дон',
+        };
 
         static list(
             paginateOptions: PaginateOptions = {},
             data: Object = {},
             options: AxiosRequestConfig = {},
-        ){
+        ) {
             return MafiaApi.paginated(
                 'players',
                 paginateOptions,
@@ -238,11 +244,17 @@ export default class MafiaApi {
     }
 
     static Games = class Games {
+        static STATUS_TITLES = {
+            null: 'Не завершена',
+            red_win: 'Победа мирных',
+            black_win: 'Победа мафии',
+        };
+
         static list(
             paginateOptions: PaginateOptions = {},
             data: Object = {},
             options: AxiosRequestConfig = {},
-        ){
+        ) {
             return MafiaApi.paginated(
                 'games',
                 paginateOptions,
@@ -254,6 +266,7 @@ export default class MafiaApi {
 
     static VueInstaller = {
         install(app: VueApp) {
+            app.config.globalProperties.MafiaApi = MafiaApi;
             app.config.globalProperties.mafiaApi = MafiaApi;
             app.config.globalProperties.$mafiaApi = MafiaApi;
         }
