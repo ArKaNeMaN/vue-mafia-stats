@@ -1,6 +1,7 @@
-FROM	node:alpine
+FROM node:alpine
 
-COPY	./dist/* ./
-RUN	npm instal -g serve
+WORKDIR /usr/src/app
+COPY ./server.js .
+COPY ./dist/* ./dist/
 
-CMD	["serve", ".", "-p", "8080", "-s"]
+CMD ["node", "server"]
