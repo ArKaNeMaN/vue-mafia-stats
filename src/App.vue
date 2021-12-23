@@ -8,7 +8,7 @@
 				<nav-item url="/about" title="Инфо"></nav-item>
 			</nav-bar>
 
-			<div id="page-content" class="p-4">
+			<div id="page-content" class="px-2 py-4">
 				<router-view/>
 			</div>
 		</div>
@@ -16,11 +16,11 @@
 </template>
 
 <script>
-	import NavBar from "@/components/Nav/NavBar";
-	import NavItem from "@/components/Nav/NavItem";
-	import PageHeader from "@/components/PageHeader";
+import NavBar from "@/components/Nav/NavBar";
+import NavItem from "@/components/Nav/NavItem";
+import PageHeader from "@/components/PageHeader";
 
-	export default {
-		components: {PageHeader, NavItem, NavBar}
-	}
+export default {
+	components: {PageHeader, NavItem, NavBar}
+}
 </script>

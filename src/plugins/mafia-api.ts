@@ -211,9 +211,31 @@ export default class MafiaApi {
         static get(
             player_id: number,
             options: AxiosRequestConfig = {}
-        ){
+        ) {
             return MafiaApi.get(
                 'players/' + player_id,
+                {},
+                options
+            );
+        }
+
+        static getWinRates(
+            player_id: number,
+            options: AxiosRequestConfig = {},
+        ) {
+            return MafiaApi.get(
+                `players/${player_id}/winRate`,
+                {},
+                options
+            );
+        }
+
+        static getScore(
+            player_id: number,
+            options: AxiosRequestConfig = {},
+        ) {
+            return MafiaApi.get(
+                `players/${player_id}/score/1900-01-01:2030-12-31`,
                 {},
                 options
             );
@@ -222,7 +244,7 @@ export default class MafiaApi {
         static getGames(
             player_id: number,
             options: AxiosRequestConfig = {},
-        ){
+        ) {
             return MafiaApi.get(`players/${player_id}/games`, {}, options);
         }
 

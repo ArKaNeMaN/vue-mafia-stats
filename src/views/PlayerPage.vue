@@ -8,53 +8,68 @@
 
 		<hr>
 
-		<loading-wrapper class="player-games" :is-loading="gPlayers === null">
-			<h3>Участия в играх</h3>
+		<div class="row">
+			<div class="player-games col-lg-6">
+				<h3>Участия в играх</h3>
 
-			<table class="table table-striped overflow-auto">
-				<thead>
-				<tr>
-					<th>№</th>
-					<th>Дата проведения</th>
-					<th>Результат</th>
-					<th>Роль</th>
-				</tr>
-				</thead>
+				<loading-wrapper :is-loading="gPlayers === null">
+					<table class="table table-striped overflow-auto">
+						<thead>
+						<tr>
+							<th>№</th>
+							<th>Дата проведения</th>
+							<th>Результат</th>
+							<th>Роль</th>
+						</tr>
+						</thead>
 
-				<tbody>
-				<tr v-for="gPlayer in gPlayers" :key="gPlayer.id">
-					<td>{{ gPlayer.game.id }}</td>
-					<td>{{ utils.fmtDate(gPlayer.game.date) }}</td>
-					<td>{{
-							gPlayer.game.result === null ? 'Не завершена' : MafiaApi.Games.STATUS_TITLES[gPlayer.game.result]
-						}}
-					</td>
-					<td>{{ MafiaApi.Players.ROLE_TITLES[gPlayer.role] ?? '?.?' }}</td>
-					<td>
-						<button class="btn btn-outline-info w-100">
-							Подробнее
-						</button>
-					</td>
-				</tr>
-				</tbody>
-			</table>
+						<tbody>
+						<tr v-for="gPlayer in gPlayers" :key="gPlayer.id">
+							<td>{{ gPlayer.game.id }}</td>
+							<td>{{ utils.fmtDate(gPlayer.game.date) }}</td>
+							<td>{{
+									gPlayer.game.result === null ? 'Не завершена' : MafiaApi.Games.STATUS_TITLES[gPlayer.game.result]
+								}}
+							</td>
+							<td>{{ MafiaApi.Players.ROLE_TITLES[gPlayer.role] ?? '?.?' }}</td>
+							<td>
+								<button class="btn btn-outline-info w-100">
+									Подробнее
+								</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</loading-wrapper>
+			</div>
 
-			<ul class="list-group" v-if="false">
-				<li v-for="gPlayer in gPlayers" :key="gPlayer.id" class="list-group-item">
+			<div class="player-win-rates col-lg-6">
+				<h3>Проценты побед</h3>
 
-					#{{ gPlayer.game.id }}: {{ utils.fmtDateTime(gPlayer.game.date) }}
-					<button class="btn btn-primary" @click="gPlayer._showInfo = !(gPlayer._showInfo ?? false)">
-						...
-					</button>
+				<loading-wrapper :is-loading="winRates === null">
+					<table class="table table-striped overflow-auto">
+						<thead>
+						<tr>
+							<th>Роль</th>
+							<th>Процент побед</th>
+						</tr>
+						</thead>
 
-					<br>
+						<tbody>
+						<tr v-for="(rate, role) in winRates" :key="role">
+							<td>{{ getRoleTitle(role) }}</td>
+							<td><b>{{ p(rate) }}</b> %</td>
+						</tr>
+						</tbody>
+					</table>
+				</loading-wrapper>
+			</div>
+		</div>
+		<hr>
+		<div class="p-3" v-if="score !== null">
+			Всего очков: {{ score.score }}
+		</div>
 
-					<code v-if="gPlayer._showInfo" class="card p-2 mt-3">
-						<pre>{{ JSON.stringify(gPlayer, null, 2) }}</pre>
-					</code>
-				</li>
-			</ul>
-		</loading-wrapper>
 	</div>
 </template>
 
@@ -70,6 +85,8 @@ export default {
 		return {
 			player: null,
 			gPlayers: null,
+			winRates: null,
+			score: null,
 		};
 	},
 
@@ -81,6 +98,29 @@ export default {
 			{},
 			{withGames: true},
 		);
+
+		this.winRates = await this.mafiaApi.Players.getWinRates(Number(this.$route.params.id));
+		this.score = await this.mafiaApi.Players.getScore(Number(this.$route.params.id));
+	},
+
+	methods: {
+		getRoleTitle(role) {
+			switch (role) {
+				case 'all':
+					return 'Все';
+				case 'red':
+					return 'Мирный';
+				case 'black':
+					return 'Мафия';
+				case 'sheriff':
+					return 'Шериф';
+				case 'don':
+					return 'Дон';
+			}
+		},
+		p(rate) {
+			return Math.round(rate * 100);
+		},
 	},
 }
 </script>
